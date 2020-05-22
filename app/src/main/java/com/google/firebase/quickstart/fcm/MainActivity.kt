@@ -3,6 +3,10 @@ package com.google.firebase.quickstart.fcm
 import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -32,6 +36,16 @@ class MainActivity : AppCompatActivity() {
             notificationManager?.createNotificationChannel(NotificationChannel(channelId,
                     channelName, NotificationManager.IMPORTANCE_LOW))
         }
+
+
+        val filter = IntentFilter()
+        filter.addAction("com.example.Broadcast")
+        val receiver = object:  BroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent) {
+                addViewDebugLayout(binding, intent.getStringExtra("push"))
+            }
+        }
+        registerReceiver(receiver, filter)
 
         // If a notification message is tapped, any data accompanying the notification
         // message is available in the intent extras. In this sample the launcher

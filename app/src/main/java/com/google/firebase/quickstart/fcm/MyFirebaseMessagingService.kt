@@ -13,6 +13,7 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import org.json.JSONObject
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
 
@@ -36,7 +37,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         // TODO(developer): Handle FCM messages here.
         // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
         Log.d(TAG, "From: ${remoteMessage.from}")
-
+        broadcastPushNotification(remoteMessage)
         // Check if message contains a data payload.
         remoteMessage.data.isNotEmpty().let {
             Log.d(TAG, "Message data payload: " + remoteMessage.data)
@@ -138,6 +139,51 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         }
 
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build())
+    }
+
+    private fun broadcastPushNotification (remoteMessage: RemoteMessage) {
+        val intent = Intent();
+        intent.action = "com.example.Broadcast"
+        val json = JSONObject();
+        json.put("data", remoteMessage.data);
+        val notificationJSONObject =
+                remoteMessage.notification?.let { buildNotificationJSONObject(it) };
+        json.put("notifications", notificationJSONObject);
+        intent.putExtra("push", json.toString(2)  );
+        sendBroadcast(intent)
+    }
+
+    private fun buildNotificationJSONObject(notification: RemoteMessage.Notification): JSONObject {
+        val json = JSONObject();
+
+        json.put("body", notification.body)
+        json.put("bodyLocalizationArgs", notification.bodyLocalizationArgs)
+        json.put("BodyLocalizationKey", notification.bodyLocalizationKey)
+        json.put("ChannelId", notification.channelId)
+        json.put("ClickAction", notification.clickAction)
+        json.put("Color", notification.color)
+        json.put("DefaultLightSettings", notification.defaultLightSettings)
+        json.put("DefaultSound", notification.defaultSound)
+        json.put("DefaultVibrateSettings", notification.defaultVibrateSettings)
+        json.put("EventTime", notification.eventTime)
+        json.put("Icon", notification.icon)
+        json.put("ImageUrl", notification.imageUrl)
+        json.put("LightSettings", notification.lightSettings)
+        json.put("Link", notification.link)
+        json.put("LocalOnly", notification.localOnly)
+        json.put("NotificationCount", notification.notificationCount)
+        json.put("NotificationPriority", notification.notificationPriority)
+        json.put("Sound", notification.sound)
+        json.put("Sticky", notification.sticky)
+        json.put("Tag", notification.tag)
+        json.put("Ticker", notification.ticker)
+        json.put("Title", notification.title)
+        json.put("TitleLocalizationArgs", notification.titleLocalizationArgs)
+        json.put("TitleLocalizationKey", notification.titleLocalizationKey)
+        json.put("VibrateTimings", notification.vibrateTimings)
+        json.put("Visibility", notification.visibility)
+
+        return json
     }
 
     companion object {
