@@ -1,4 +1,4 @@
-package com.google.firebase.quickstart.fcm.kotlin
+package com.google.firebase.quickstart.fcm
 
 import android.content.Context
 import android.util.Log

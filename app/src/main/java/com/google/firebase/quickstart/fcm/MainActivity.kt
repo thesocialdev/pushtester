@@ -1,17 +1,21 @@
-package com.google.firebase.quickstart.fcm.kotlin
+package com.google.firebase.quickstart.fcm
 
+import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessaging
-import com.google.firebase.quickstart.fcm.R
 import com.google.firebase.quickstart.fcm.databinding.ActivityMainBinding
+import java.text.SimpleDateFormat
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -47,9 +51,9 @@ class MainActivity : AppCompatActivity() {
         // [END handle_data_extras]
 
         binding.subscribeButton.setOnClickListener {
-            Log.d(TAG, "Subscribing to weather topic")
+            Log.d(TAG, "Subscribing to wikipedia topic")
             // [START subscribe_topics]
-            FirebaseMessaging.getInstance().subscribeToTopic("weather")
+            FirebaseMessaging.getInstance().subscribeToTopic("wikipedia")
                     .addOnCompleteListener { task ->
                         var msg = getString(R.string.msg_subscribed)
                         if (!task.isSuccessful) {
@@ -57,10 +61,10 @@ class MainActivity : AppCompatActivity() {
                         }
                         Log.d(TAG, msg)
                         Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+                        addViewDebugLayout(binding, msg)
                     }
             // [END subscribe_topics]
         }
-
         binding.logTokenButton.setOnClickListener {
             // Get token
             // [START retrieve_current_token]
@@ -78,11 +82,25 @@ class MainActivity : AppCompatActivity() {
                         val msg = getString(R.string.msg_token_fmt, token)
                         Log.d(TAG, msg)
                         Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+                        addViewDebugLayout(binding, msg)
                     })
             // [END retrieve_current_token]
         }
 
         Toast.makeText(this, "See README for setup instructions", Toast.LENGTH_SHORT).show()
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun addViewDebugLayout(binding: ActivityMainBinding, msg: String) {
+        // Append log msg into the debug layout
+        val debugLayout = binding.debug
+        val debugText = TextView(this)
+        val currentTime: String = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date())
+
+        debugText.text = "$currentTime $msg";
+        debugText.setTextIsSelectable(true);
+        debugLayout.addView(debugText)
+        binding.scroll.post { binding.scroll.fullScroll(View.FOCUS_DOWN) }
     }
 
     companion object {
