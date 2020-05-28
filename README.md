@@ -5,7 +5,11 @@ This is a simple Android application, based on FCM quickstart samples, to debug 
 Features:
 - Log FCM token
 - Log subscription actions
-- Log rae JSON data received from FCM
+- Log raw JSON data received from FCM
+
+<p align="center">
+  <img src="./doc/images/screenshot.jpg" width="300px" />
+</p>
 
 ## Configure google-services.json
 
