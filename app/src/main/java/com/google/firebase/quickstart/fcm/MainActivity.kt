@@ -9,6 +9,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Build
 import android.os.Bundle
+import android.text.Html
 import android.util.Log
 import android.view.View
 import android.widget.TextView
@@ -111,8 +112,9 @@ class MainActivity : AppCompatActivity() {
         val debugText = TextView(this)
         val currentTime: String = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date())
 
-        debugText.text = "$currentTime $msg";
+        debugText.text = Html.fromHtml("<b>$currentTime</b> $msg");
         debugText.setTextIsSelectable(true);
+        debugText.setPadding(0, 15, 0, 15);
         debugLayout.addView(debugText)
         binding.scroll.post { binding.scroll.fullScroll(View.FOCUS_DOWN) }
     }

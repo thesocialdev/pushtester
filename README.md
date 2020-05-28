@@ -7,9 +7,9 @@ Features:
 - Log subscription actions
 - Log rae JSON data received from FCM
 
-## Installation
+## Configure google-services.json
 
-In the Android Studio IDE make sure to enable FCM in the application, to do that go to Tools > Firebase > Cloud Messaging > Set Up Firebase Cloud Messaging and follow the steps
+In the Android Studio IDE make sure to enable FCM in the application, to do that go to Tools > Firebase > Cloud Messaging > Set Up Firebase Cloud Messaging and follow the steps. The google-services.json file should now by located inside the app folder.
 
 ## Download APK
 
